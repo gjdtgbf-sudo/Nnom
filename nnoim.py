@@ -20,15 +20,8 @@ from typing import Optional, Tuple, Dict, List
 import usb.core
 import usb.util
 
-# PySide6 imports
-from PySide6.QtWidgets import (
-    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-    QPushButton, QTextEdit, QListWidget, QTabWidget, QLabel,
-    QMessageBox, QDialog, QSvgWidget, QCheckBox, QGroupBox, QTableWidget,
-    QTableWidgetItem, QHeaderView, QSplitter, QFrame
-)
-from PySide6.QtCore import Qt, QThread, Signal, Slot, QTimer, QObject, QByteArray
-from PySide6.QtGui import QFont, QColor
+# PySide6 imports - تم تعديل الاستيرادات
+ from PySide6.QtWidgets import ( QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QTextEdit, QListWidget, QTabWidget, QLabel, QMessageBox, QDialog, QCheckBox, QGroupBox, QTableWidget, QTableWidgetItem, QHeaderView, QSplitter, QFrame ) from PySide6.QtCore import Qt, QThread, Signal, Slot, QTimer, QObject, QByteArray from PySide6.QtGui import QFont, QColor, QPainter, QPixmap
 
 # ----------------------------------------------------------------------
 # USB Constants (UNISOC BROM)
@@ -825,24 +818,36 @@ class DiagramDialog(QDialog):
         self.setWindowTitle("Specify Protection - Diagram")
         self.setFixedSize(400, 250)
         layout = QVBoxLayout(self)
-
-        svg_widget = QSvgWidget()
-        svg_data = """
-<svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
-  <rect x="50" y="20" width="300" height="30" fill="lightblue" stroke="black"/>
-  <text x="200" y="40" text-anchor="middle" font-family="Arial" font-size="14">Settings</text>
-  <line x1="200" y1="50" x2="200" y2="80" stroke="black"/>
-  <rect x="50" y="80" width="300" height="30" fill="lightgreen" stroke="black"/>
-  <text x="200" y="100" text-anchor="middle" font-family="Arial" font-size="14">About Phone</text>
-  <line x1="200" y1="110" x2="200" y2="140" stroke="black"/>
-  <rect x="50" y="140" width="300" height="30" fill="lightyellow" stroke="black"/>
-  <text x="200" y="160" text-anchor="middle" font-family="Arial" font-size="14">Build Number</text>
-</svg>
-"""
-        svg_widget.load(svg_data.encode())
-        layout.addWidget(svg_widget)
+        
+        # إنشاء واجهة نصية بدلاً من SVG
+        diagram_label = QLabel()
+        diagram_label.setAlignment(Qt.AlignCenter)
+        diagram_label.setText(
+            "<div style='text-align: center; padding: 20px;'>"
+            "<h3 style='color: #007acc;'>مخطط تفعيل خيارات المطور</h3>"
+            "<div style='margin: 10px; padding: 10px; background: lightblue; border-radius: 5px;'>"
+            "⚙️ الإعدادات (Settings)"
+            "</div>"
+            "<div style='margin: 5px;'>⬇</div>"
+            "<div style='margin: 10px; padding: 10px; background: lightgreen; border-radius: 5px;'>"
+            "📱 حول الهاتف (About Phone)"
+            "</div>"
+            "<div style='margin: 5px;'>⬇</div>"
+            "<div style='margin: 10px; padding: 10px; background: lightyellow; border-radius: 5px;'>"
+            "🔢 رقم البناء (Build Number)"
+            "</div>"
+            "<div style='margin: 5px;'>⬇</div>"
+            "<div style='margin: 10px; padding: 10px; background: #ffcccb; border-radius: 5px;'>"
+            "👆 اضغط 7 مرات متتالية"
+            "</div>"
+            "</div>"
+        )
+        diagram_label.setStyleSheet("font-size: 14px; font-family: Arial;")
+        
+        layout.addWidget(diagram_label)
 
         QTimer.singleShot(9000, self.accept)
+
 
 
 # ----------------------------------------------------------------------
